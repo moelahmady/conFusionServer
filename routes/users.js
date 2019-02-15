@@ -2,7 +2,7 @@ var express = require('express');
 var userRouter = express.Router();
 var passport = require('passport');
 var authenticate = require('../authenticate');
-
+var cors = require('./cors');
 const bodyParser = require('body-parser');
 var User = require('../models/user');
 
@@ -100,7 +100,7 @@ userRouter.get('/facebook/token', passport.authenticate('facebook-token'), (req,
   }
 });
 
-router.get('/checkJWTtoken', cors.corsWithOptions, (req, res) => {
+userRouter.get('/checkJWTtoken', cors.corsWithOptions, (req, res) => {
   passport.authenticate('jwt', {session: false}, (err, user, info) => {
     if (err)
       return next(err);
