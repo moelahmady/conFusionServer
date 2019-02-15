@@ -11,8 +11,8 @@ leaderRouter.route('/')
 
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        if (req.query.featured) {
-            Leaders.find({ "featured": true })
+        if (req.query) {
+            Leaders.find(req.query)
                 .then((leaders) => {
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');

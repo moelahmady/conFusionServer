@@ -12,8 +12,8 @@ dishRouter.use(bodyParser.json());
 //Handling All Dishes
 dishRouter.route('/')
     .get((req, res, next) => {
-        if (req.query.featured) {
-            Dishes.find({ "featured": true })
+        if (req.query) {
+            Dishes.find(req.query)
                 .populate('comments.author')
                 .then((dishes) => {
                     res.statusCode = 200;

@@ -10,8 +10,8 @@ promotionRouter.use(bodyParser.json());
 
 promotionRouter.route('/')
     .get((req, res, next) => {
-        if (req.query.featured) {
-            Promotions.find({ "featured": true })
+        if (req.query) {
+            Promotions.find(req.query)
                 .then((promotions) => {
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
