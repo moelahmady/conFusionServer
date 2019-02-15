@@ -10,25 +10,31 @@ leaderRouter.use(bodyParser.json());
 leaderRouter.route('/')
     .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
     .get(cors.cors, (req, res, next) => {
-        if (req.query) {
-            Leaders.find(req.query)
-                .then((leaders) => {
-                    res.statusCode = 200;
-                    res.setHeader('Content-Type', 'application/json');
-                    res.json(leaders);
-                }, (err) => next(err))
-                .catch((err) => next(err));
-        }
-        else {
-            Leaders.find({})
-                .then((leaders) => {
-                    res.statusCode = 200;
-                    res.setHeader('Content-Type', 'application/json');
-                    res.json(leaders);
-                }, (err) => next(err))
-                .catch((err) => next(err));
-        }
-
+        // if (req.query) {
+        //     Leaders.find(req.query)
+        //         .then((leaders) => {
+        //             res.statusCode = 200;
+        //             res.setHeader('Content-Type', 'application/json');
+        //             res.json(leaders);
+        //         }, (err) => next(err))
+        //         .catch((err) => next(err));
+        // }
+        // else {
+        //     Leaders.find({})
+        //         .then((leaders) => {
+        //             res.statusCode = 200;
+        //             res.setHeader('Content-Type', 'application/json');
+        //             res.json(leaders);
+        //         }, (err) => next(err))
+        //         .catch((err) => next(err));
+        // }
+        Leaders.find({})
+            .then((leaders) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(leaders);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     })
     .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         Leaders.create(req.body)
@@ -59,12 +65,12 @@ leaderRouter.route('/:leaderId')
     .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
     .get(cors.cors, (req, res, next) => {
         Leaders.findById(req.params.leaderId)
-        .then((leader) => {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json(leader);
-        }, (err) => next(err))
-        .catch((err) => next(err));
+            .then((leader) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(leader);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     })
     .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         res.statusCode = 403;
