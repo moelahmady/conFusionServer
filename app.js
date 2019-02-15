@@ -30,13 +30,6 @@ connect.then((db) => {
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 app.use(function (req, res, next) {
 
@@ -57,6 +50,25 @@ app.use(function (req, res, next) {
   next();
 });
 
+// Secure traffic only
+app.all('*', (req, res, next) => {
+  if (req.secure) {
+    return next();
+  }
+  else {
+    res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+  }
+});
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+
 app.use(session({
   name: 'session-id',
   secret: '12345-67890-09876-54321',
@@ -69,8 +81,8 @@ app.use(passport.session());
 
 // app.use('/', indexRouter);
 
-app.get('/', function(req, res, next) {
-  res.sendFile(path.join(__dirname+'/public/index.html'));
+app.get('/', function (req, res, next) {
+  res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
 app.use('/users', usersRouter);
