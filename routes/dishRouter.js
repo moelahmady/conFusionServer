@@ -13,34 +13,14 @@ dishRouter.use(bodyParser.json());
 dishRouter.route('/')
     .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
     .get(cors.cors, (req, res, next) => {
-        // if (req.query) {
-        //     Dishes.find(req.query)
-        //         .populate('comments.author')
-        //         .then((dishes) => {
-        //             res.statusCode = 200;
-        //             res.setHeader('Content-Type', 'application/json');
-        //             res.json(dishes);
-        //         }, (err) => next(err))
-        //         .catch((err) => next(err));
-        // } else {
-        //     Dishes.find({})
-        //         .populate('comments.author')
-        //         .then((dishes) => {
-        //             res.statusCode = 200;
-        //             res.setHeader('Content-Type', 'application/json');
-        //             res.json(dishes);
-        //         }, (err) => next(err))
-        //         .catch((err) => next(err));
-        // }
-
         Dishes.find({})
-                .populate('comments.author')
-                .then((dishes) => {
-                    res.statusCode = 200;
-                    res.setHeader('Content-Type', 'application/json');
-                    res.json(dishes);
-                }, (err) => next(err))
-                .catch((err) => next(err));
+            .populate('comments.author')
+            .then((dishes) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(dishes);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     })
     .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         Dishes.create(req.body)
@@ -183,25 +163,25 @@ dishRouter.route('/:dishId/comments/:commentId')
     .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
     .get(cors.cors, (req, res, next) => {
         Dishes.findById(req.params.dishId)
-        .populate('comments.author')
-        .then((dish) => {
-            if (dish != null && dish.comments.id(req.params.commentId) != null) {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json(dish.comments.id(req.params.commentId));
-            }
-            else if (dish == null) {
-                err = new Error('Dish ' + req.params.dishId + ' not found');
-                err.status = 404;
-                return next(err);
-            }
-            else {
-                err = new Error('Comment ' + req.params.commentId + ' not found');
-                err.status = 404;
-                return next(err);
-            }
-        }, (err) => next(err))
-        .catch((err) => next(err));
+            .populate('comments.author')
+            .then((dish) => {
+                if (dish != null && dish.comments.id(req.params.commentId) != null) {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(dish.comments.id(req.params.commentId));
+                }
+                else if (dish == null) {
+                    err = new Error('Dish ' + req.params.dishId + ' not found');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Comment ' + req.params.commentId + ' not found');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
     })
     .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;

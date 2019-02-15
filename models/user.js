@@ -16,7 +16,7 @@ var userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    facebookId: String,
+    facebookId: String
 
 });
 
